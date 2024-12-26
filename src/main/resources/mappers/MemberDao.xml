@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com._401unauthorized.board.dao.MemberDao">
+<!-- sql 문 -->
+<!--    <select id="login" parameterType="MemberDto" resultType="boolean">-->
+<!--        SELECT COUNT(*) FROM MEMBER WHERE M_ID=#{m_id} AND M_PW=#{m_pw}-->
+<!--    </select>-->
+</mapper>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Title</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.17/jquery-3.1.1.min.js"
+				integrity="sha512-U6K1YLIFUWcvuw5ucmMtT9HH4t0uz3M366qrF5y4vnyH6dgDzndlcGvH/Lz5k8NFh80SN95aJ5rqGZEdaQZ7ZQ=="
+				crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.17/jquery.bxslider.min.js"
+				integrity="sha512-LaBO0tZh1+6Ebk+EnHt/WsGM0UnmkCXfQ1rfhGmpa5MXUdslNuSSELBRcteHKz4k4ny+Op10Ax2fPoTNq+VcUg=="
+				crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.17/jquery.bxslider.css"
+			  	integrity="sha512-rV4fiystTwIvs71MLqeLbKbzosmgDS7VU5Xqk1IwFitAM+Aa9x/8Xil4CW+9DjOvVle2iqg4Ncagsbgu2MWxKQ=="
+			  	crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+		<link rel="stylesheet" th:href="@{/css/style.css}">
+		<script defer src="js/index.js"></script>
+		<script th:inline="javascript">
+			const m =[[${msg}]];
+
+            $(() => {
+                // msgPrint()
+                // loginStatus()
+
+                // bxSlider 설정용 스크립트
+                $(".slider").bxSlider({
+                    auto: true,
+                    slideWidth: 600,
+                })
+            }) // ready end
+		</script>
+	</head>
+
+	<body>
+		<h1>templates/index.html</h1>
+
+		<th:block th:replace="~{fragments::header}"></th:block>
+		<section>
+			<div class="content-home">
+				<div class="slider">
+					<div>
+						<img src="/img/Chrysanthemum.jpg">
+					</div>
+					<div>
+						<img src="/img/Desert.jpg">
+					</div>
+					<div>
+						<img src="/img/Lighthouse.jpg">
+					</div>
+					<div>
+						<img src="/img/Tulips.jpg">
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<th:block th:replace="~{fragments::footer}"></th:block>
+	</body>
+</html>
