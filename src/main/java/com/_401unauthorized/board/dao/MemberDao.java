@@ -12,4 +12,7 @@ public interface MemberDao {
     // 짧은놈은 = @Select("SELECT....")
     @Select("SELECT COUNT(*) FROM MEMBER WHERE M_ID=#{m_id} AND M_PW=#{m_pw}")
     boolean login(MemberDto mDto);
+
+    // 길다? xlm
+    boolean join(MemberDto mDto);
 }

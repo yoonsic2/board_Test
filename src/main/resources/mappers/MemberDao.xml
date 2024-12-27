@@ -7,4 +7,9 @@
 <!--    <select id="login" parameterType="MemberDto" resultType="boolean">-->
 <!--        SELECT COUNT(*) FROM MEMBER WHERE M_ID=#{m_id} AND M_PW=#{m_pw}-->
 <!--    </select>-->
+
+    <insert id="join" parameterType="MemberDto">
+        INSERT INTO MEMBER(M_ID, M_PW, M_NAME, M_BIRTH, M_ADDRESS, M_POINT)
+        VALUES(#{m_id}, #{m_pw}, #{m_name}, #{m_birth}, #{m_address}, default)
+    </insert>
 </mapper>

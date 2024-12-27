@@ -7,7 +7,7 @@ function goHome() {
 
 
 function msgPrint() {
-    if(m != '') {
+    if(m !=null) {
         alert(m)
     }
 }

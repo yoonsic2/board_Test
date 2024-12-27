@@ -4,6 +4,12 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Title</title>
+		<script th:inline="javascript">
+			const m = [[${msg}]]
+			if(m!=null){
+				alert(m);
+			}
+		</script>
 	</head>
 
 	<body>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script th:src="@{/js/index.js}"></script>
+  <script th:inline="javascript">
+    const m = [[${msg}]]
+    msgPrint();
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <th:block th:replace="~{fragments::header}"></th:block>
+    <section>
+        <form action="/member/join" method="post" class="login-form" name="joinFrm" onsubmit="return check()">
+
+          <input name="m_id" type="text" class="login-input" id="m_id"
+                 title="아이디" autofocus placeholder="아이디">
+          <span id="checkMsg">  </span>
+          <input type="button" id="checkId" class="idcheck-btn" value="중복확인">
+          <input name="m_pw" type="password" class="login-input"
+                 title="비밀번호" placeholder="비밀번호">
+          <input name="m_name" type="text"
+                 class="login-input" title="이름" placeholder="이름">
+          <input name="m_birth" type="text" class="login-input" title="생일"
+                 placeholder="생일">
+          <input name="m_address" type="text" class="login-input"
+                 title="주소" placeholder="주소">
+          <input type="submit" class="login-btn" value="가입">
+
+        </form>
+    </section>
+    <th:block th:replace="~{fragments::footer}"></th:block>
+  </div>
+  <script>
+    //jquery validation 활용해서 유효성 체크해보세요~
+    function check(){
+      const joinFrm = document.joinFrm;
+      console.log(joinFrm);
+      const len = joinFrm.length-1;
+      for(let i=0; i<len; i++){
+        if(joinFrm[i].value===''||joinFrm[i].value===null){
+          alert(joinFrm[i].title+" 입렵 해주세요 !")
+          joinFrm[i].focus();
+          return false;
+        }
+      }
+      return true;  //일반버튼이면 joinFrm.submit()
+    }
+  </script>
+</body>
+</html>
