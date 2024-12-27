@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <script th:src="@{/js/index.js}"></script>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <script defer th:src="@{/js/index.js}"></script>
   <script th:inline="javascript">
     const m = [[${msg}]]
-    msgPrint();
+    window.onload=()=>{
+      msgPrint();
+    }
   </script>
 </head>
 <body>

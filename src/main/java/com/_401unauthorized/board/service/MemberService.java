@@ -17,6 +17,10 @@ public class MemberService {
     }
 
     public boolean join(MemberDto mDto) {
-        return mDao.join(mDto);
+        //이미 사용중인 ID: true
+        if(mDao.isUsedId(mDto.getM_id())){
+            return false; // 회원가입 실패
+        }
+        return mDao.join(mDto);  // 회원가입 성공시: true, 실패하면: false
     }
 }

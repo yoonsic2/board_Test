@@ -13,6 +13,9 @@ public interface MemberDao {
     @Select("SELECT COUNT(*) FROM MEMBER WHERE M_ID=#{m_id} AND M_PW=#{m_pw}")
     boolean login(MemberDto mDto);
 
-    // 길다? xlm
+    // 길다? xml
     boolean join(MemberDto mDto);
+
+    //@Select("SELECT COUNT(*) FROM MEMBER WHERE M_ID=#{id}")
+    boolean isUsedId(String id);
 }

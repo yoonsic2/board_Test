@@ -18,10 +18,11 @@
 		<script defer src="js/index.js"></script>
 		<script th:inline="javascript">
 			const m =[[${msg}]];
-
+			const id = [[${session.id}]] // id 속성이 없으면 null
+			console.log("id:"+id)
             $(() => {
-                // msgPrint()
-                // loginStatus()
+                msgPrint()
+                loginStatus()
 
                 // bxSlider 설정용 스크립트
                 $(".slider").bxSlider({
