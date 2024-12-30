@@ -21,4 +21,12 @@
     <select id="isUsedId" parameterType="String" resultType="java.lang.Boolean">
         SELECT COUNT(*) FROM MEMBER WHERE M_ID=#{id}
     </select>
+
+    <select id="getSecurityPw" parameterType="String" resultType="java.lang.String">
+        SELECT M_PW FROM MEMBER WHERE M_ID=#{mId}
+    </select>
+
+    <select id="getMemberInfo" resultType="com._401unauthorized.board.dto.MemberDto">
+        SELECT M_ID, M_NAME, M_POINT FROM MEMBER WHERE M_ID=#{mId}
+    </select>
 </mapper>

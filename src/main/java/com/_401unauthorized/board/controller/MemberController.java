@@ -21,7 +21,8 @@ public class MemberController {
     private final MemberService mSer;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(HttpSession session) {
+        // 인가(권한) 여부를 너무 많이 확인해야 됨. --> 인터셉터 활용 or 시큐리티
         return "member/login";
     }
 
@@ -32,9 +33,12 @@ public class MemberController {
         //DB에서 select
         //MemberDto mDto = MemberDto.builder().m_id(m_id).m_pw(m_pw).build();
 
-        boolean result = mSer.login(mDto);
-        if (result) {
-            session.setAttribute("id", mDto.getM_id());
+        //boolean result = mSer.login(mDto);
+        MemberDto member = mSer.login(mDto);
+        log.info("====member: {}", member);
+        if (member != null) {
+            //session.setAttribute("id", mDto.getM_id());
+            session.setAttribute("member", member);
             //session.setAttribute("mb", mDto);
             return "redirect:/";
         }
@@ -63,7 +67,7 @@ public class MemberController {
         return "redirect:/member/join";
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public String logout(HttpSession session, RedirectAttributes rttr) {
         session.invalidate();  //세션 무효화
         rttr.addFlashAttribute("msg", "로그아웃 성공");

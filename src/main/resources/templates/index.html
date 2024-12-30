@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--------------------------------------------------------------------------->
 	<head>
 		<meta charset="UTF-8">
 		<title>Title</title>
@@ -18,8 +20,8 @@
 		<script defer src="js/index.js"></script>
 		<script th:inline="javascript">
 			const m =[[${msg}]];
-			const id = [[${session.id}]] // id 속성이 없으면 null
-			console.log("id:"+id)
+			const mb = [[${session.member}]] // member 속성이 없으면 null
+			console.log("mb:"+mb)
             $(() => {
                 msgPrint()
                 loginStatus()
@@ -32,9 +34,8 @@
             }) // ready end
 		</script>
 	</head>
-
+<!-------------------------------------------------------------------------->
 	<body>
-		<h1>templates/index.html</h1>
 
 		<th:block th:replace="~{fragments::header}"></th:block>
 		<section>
@@ -58,4 +59,5 @@
 
 		<th:block th:replace="~{fragments::footer}"></th:block>
 	</body>
+<!-------------------------------------------------------------------------->
 </html>

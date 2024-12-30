@@ -18,4 +18,8 @@ public interface MemberDao {
 
     //@Select("SELECT COUNT(*) FROM MEMBER WHERE M_ID=#{id}")
     boolean isUsedId(String id);
+
+    MemberDto getMemberInfo(String mId);
+
+    String getSecurityPw(String mId);
 }
