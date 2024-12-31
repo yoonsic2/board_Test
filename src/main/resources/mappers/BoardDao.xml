@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com._401unauthorized.board.dao.BoardDao">
+
+    <insert id="insertDummyData">
+        INSERT INTO BOARD VALUES(NULL, #{b_title}, #{b_contents}, #{b_writer}, DEFAULT, DEFAULT)
+    </insert>
+
+    <select id="getBoardList" parameterType="HashMap" resultType="com._401unauthorized.board.dto.BoardDto">
+        SELECT B_NUM, B_TITLE, B_WRITER, B_DATE, B_VIEWS FROM BOARD ORDER BY B_NUM DESC LIMIT #{startIndex}, #{pageSize}
+    </select>
+</mapper>

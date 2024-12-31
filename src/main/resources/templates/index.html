@@ -19,13 +19,13 @@
 		<link rel="stylesheet" th:href="@{/css/style.css}">
 		<script defer src="js/index.js"></script>
 		<script th:inline="javascript">
-			const m =[[${msg}]];
+			const m =[[${msg}]];  //  model(request영역) 저장된 속성객체
+			//const m=[[${param.msg}]]; //  request 객체의 파라미터
 			const mb = [[${session.member}]] // member 속성이 없으면 null
 			console.log("mb:"+mb)
             $(() => {
                 msgPrint()
                 loginStatus()
-
                 // bxSlider 설정용 스크립트
                 $(".slider").bxSlider({
                     auto: true,

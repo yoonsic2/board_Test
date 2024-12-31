@@ -19,7 +19,7 @@
 	<!--  log4jdbc DB 로깅 설정 -->
 	<logger name="jdbc.sqlonly" level="info"/>
 	<logger name="jdbc.connection" level="off"/>
-	<logger name="jdbc.resultsettable" level="info"/>
+	<logger name="jdbc.resultsettable" level="trace"/>
 	<logger name="jdbc.audit" level="off"/>
 	<logger name="jdbc.sqltiming" level="off"/>
 	<logger name="jdbc.resultset" level="off"/>

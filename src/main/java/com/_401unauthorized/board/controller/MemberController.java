@@ -22,12 +22,15 @@ public class MemberController {
 
     @GetMapping("/login")
     public String login(HttpSession session) {
+        if(session.getAttribute("member") != null) {
+            return "redirect:/";  // 로그인 상태라면 index.html 로 리다이렉트
+        }
         // 인가(권한) 여부를 너무 많이 확인해야 됨. --> 인터셉터 활용 or 시큐리티
         return "member/login";
     }
 
     @PostMapping("/login")
-    public String login(MemberDto mDto, HttpSession session) {
+    public String login(MemberDto mDto, HttpSession session, RedirectAttributes rttr) {
         log.info("id : {}, pw : {}", mDto.getM_id(), mDto.getM_pw());
 
         //DB에서 select
@@ -39,14 +42,24 @@ public class MemberController {
         if (member != null) {
             //session.setAttribute("id", mDto.getM_id());
             session.setAttribute("member", member);
-            //session.setAttribute("mb", mDto);
-            return "redirect:/";
-        }
-        return "index";
+            Object url = session.getAttribute("urlPrior_login");
+            if(url!=null) {
+                session.removeAttribute("urlPrior_login");
+                return "redirect:"+url.toString();
+            }
+            return "redirect:/board";
+        } // end login 성공
+        //rttr.addAttribute("msg", "로그인실패"); //request 객체에 저장
+        rttr.addFlashAttribute("msg", "로그인 실패");
+        //session 영역 저장 --> request 영역 저장 --> 1번 사용후 자동삭제
+        return "redirect:/";
     }
 
     @GetMapping("/join")
-    public String join() {
+    public String join(HttpSession session) {
+        if(session.getAttribute("member") != null) {
+            return "redirect:/";  // index.html 포워딩
+        }
         return "member/join";  //Get이야?  포워딩 이거나 DB에 가서 select한다
     }
 

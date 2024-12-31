@@ -15,10 +15,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(interceptor)
-                // 컨트롤러에서
+                // 컨트롤러에서 / 모든 경로의 url 인터셉터
                 .addPathPatterns("/**")
+                // 인터셉터 에서 제외할 url
                 .excludePathPatterns("/", "/member/login", "/member/logout")
                 .excludePathPatterns("/member/join")
-                .excludePathPatterns("/js/**", "/css/**", "/img/**");
+                .excludePathPatterns("/js/**", "/css/**", "/img/**")
+                .excludePathPatterns("/favicon.ico", "/error");
     }
 }
