@@ -3,10 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <!--
- 1. parameterType 생략 가능
- 2. resultType="Boolean" 생략 가능
- 3. #{변수명}, #{필드명}, #{속성명}
- 4. 여러 레코드를 반환시 List 탑입이 아닌 객체타입 명시
+id 자리엔 메소드 이름
+parameterType : 생략 가능, Mapper Class 가능, 한번만 사용가능
+resultType : resultType="Boolean" 생략 가능(?), Mapper Class 가능, 한번만 사용가능
+#{변수명}, #{필드명} #{속성명}
+여러 레코드를 반환시 List 타입이 아닌 객체타입명시
+${변수명}, ${필드명}, ${속성명} : 문자열일경우 ''을 붙이지 않음
  -->
 <mapper namespace="com._401unauthorized.board.dao.MemberDao">
 <!-- sql 문 -->

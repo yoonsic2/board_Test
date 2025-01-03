@@ -9,4 +9,30 @@
     <select id="getBoardList" parameterType="HashMap" resultType="com._401unauthorized.board.dto.BoardDto">
         SELECT B_NUM, B_TITLE, B_WRITER, B_DATE, B_VIEWS FROM BOARD ORDER BY B_NUM DESC LIMIT #{startIndex}, #{pageSize}
     </select>
+
+    <select id="getBoardListSearch" resultType="com._401unauthorized.board.dto.BoardDto">
+        SELECT B_NUM, B_TITLE, B_WRITER, B_DATE, B_VIEWS FROM BOARD
+        <choose>
+            <when test="colname !=null and colname!=''">
+                where ${colname} like concat('%',#{keyword},'%')
+            </when>
+            <otherwise>
+                order by b_num desc limit #{startIdx}, #{listcnt}
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getBoardCount" resultType="java.lang.Integer">
+        select count(*) from board
+        <if test="colname!=null and colname!=''">
+            where ${colname} like concat('%',#{keyword},'%')
+        </if>
+    </select>
+
+    <select id="getBoardDetail" resultType="com._401unauthorized.board.dto.BoardDto">
+        select b_num, b_title, b_contents, b_writer, b_views,
+               date_format(b_date, '%Y-%m-%d %H:%i:%s') b_date
+               from board where b_num= #{bNum}
+    </select>
+
 </mapper>

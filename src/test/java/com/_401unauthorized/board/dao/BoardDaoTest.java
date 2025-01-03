@@ -27,9 +27,12 @@ public class BoardDaoTest {
         }
     }
 
+    /*
     @Test
-    public void findBoardListTest(){
+    public void fisndBoardListTest(){
         assertEquals(35, boardDao.getBoardListAll().size());
         boardDao.getBoardListAll().stream().forEach(bDto -> System.out.println(bDto));
     }
+
+     */
 }

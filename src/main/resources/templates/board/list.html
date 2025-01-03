@@ -59,7 +59,7 @@
                             <th:block th:each="board:${bList}">
                                 <div class="t-no p-10" th:text="${board.b_num}"></div>
                                 <div class="t-title p-30" >
-                                    <a href="" th:text="${board.b_title}"></a>
+                                    <a th:href="@{/board/detail/{b_num}(b_num=${board.b_num})}" th:text="${board.b_title}"></a>
                                 </div>
                                 <div class="t-name p-15" th:text="${board.b_writer}"></div>
                                 <div class="t-date p-30"
@@ -78,6 +78,20 @@
     </section>
 
     <th:block th:replace="~{fragments::footer}"></th:block>
+    <script th:inline="javascript">
+        $('#search').click(function (){
+            let keyword = $('#keyword').val();
+            if(keyword===''){
+                alert("검색어를 입력해주세요");
+                return;
+            }
+            let select=$('#sel').val();
+            if(select=='')return;
+            console.log(keyword,select);
+            location.href="/board?colname="+select+'&keyword='+keyword+"&pageNum=1";
+            //"localhost/board?colname=b_title&keyword=제목&pageNum=1"
+        })
+    </script>
 </div>
 </body>
 </html>

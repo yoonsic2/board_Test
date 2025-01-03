@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script th:inline="javascript">
+        const m = [[${msg}]]
+        const mb = [[${session.member}]]
+        $(() => {
+            msgPrint()
+            loginStatus()
+        })
+    </script>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script defer th:src="@{/js/index.js}"></script>
+</head>
+<body>
+<div class="wrap">
+    <th:block th:replace="~{fragments::header}"></th:block>
+    <section>
+        <div class="content">
+            <div class="write-form">
+                <div class="user-info">
+                    <div class="user-info-sub">
+                        <p th:text="|등급 [${session.member.g_name}]|"></p>
+                        <p th:text="|POINT [${session.member.m_point}]|"></p>
+                    </div>
+                </div>
+                <h2 class="login-header">상세 보기</h2>
+                <div>
+                    <div class="t_content p-15">NUM</div>
+                    <div class="d_content p-85" th:text="${board.b_num}"> 글번호 </div>
+                </div>
+                <div>
+                    <div class="t_content p-15">WRITER</div>
+                    <div class="d_content p-35" th:text="${board.b_writer}"> 글쓴이 </div>
+                    <div class="t_content p-15">DATE</div>
+                    <div class="d_content p-35" th:text="${board.b_date}"> 등록일시 </div>
+                </div>
+                <div>
+                    <div class="t_content p-15">TITLE</div>
+                    <div class="d_content p-85" th:text="${board.b_title}"> 제목 </div>
+                </div>
+                <div>
+                    <div class="t_content p-15 content_h">CONTENTS</div>
+                    <div class="d_content p-85 content_h" th:text="${board.b_contents}"> 글내용 </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- 버튼 영역 -->
+        <div class="btn-area">
+            <button class="btn-write" id="upbtn"
+                    th:bnum="${board.b_num}"
+                    th:onclick="upload_board(this.getAttribute('bnum'))">U
+            </button>
+
+            <button class="btn-write" id="delbtn"
+                    th:data-bnum="${board.b_num}"
+                    onclick="delete_board(this)">D
+                <!-- delete_board('icia')  -->
+            </button>
+
+            <button class="btn-sub"
+                    onclick="backbtn()">B
+            </button>
+        </div>
+
+        <!-- 댓글 입력 양식-->
+        <form id="rform"  class="write-form" >
+            <!-- 게시글 정보(글번호), 댓글 내용, 접속자(작성자) -->
+            <input type="hidden" name="r_bnum" id="r_bnum"
+                   th:value="${board.b_num}">
+            <textarea name="r_contents" rows="3" cols="80"  class="write-input ta"
+                      id="r_contents" placeholder="댓글을 적어주세요."></textarea>
+            <input type="hidden" name="r_writer" id="r_writer"
+                   th:value="${session.member.m_id}">
+            <input type="button" value="댓글 전송"
+                   class="btn-write" onclick="replyInsert()"
+                   style="width:100%; margin-bottom: 30px;">
+        </form>
+
+        <!-- 댓글 리스트 출력 영역-->
+        <table style="width: 50%" th:align="center">
+            <!-- 제목 테이블 -->
+            <tr class="rtbl-head">
+                <td class="p-20">WRITER</td>
+                <td class="p-50">CONTENTS</td>
+                <td class="p-30">DATE</td>
+            </tr>
+        </table>
+
+        <!-- 댓글 리스트 -->
+        <table style="width: 50%;" id="rtable">
+        </table>
+    </section>
+    <th:block th:replace="~{fragments::footer}"></th:block>
+</div>
+<script th:inline="javascript">
+    function  upload_board(bnum){
+        console.log('update bnum:'+bnum);
+    }
+
+    function delete_board(button){
+        let bnum = $(button).attr("data-bnum")
+        //console.log('delete bnum:', bnum);
+        let result = confirm('정말 삭제 하겠습니까?')
+        if(result){
+            location.href=`/board/delete?b_num=${bnum}`;  // js 변수
+        }
+    }
+
+    function backbtn(){
+        location.href="/board"
+    }
+
+    function replyInsert(){
+        let data = {};
+        data.r_contents = $('#r_contents').val();
+        data.r_bnum = $('#r_bnum').val();
+        //data.r_writer = $('#r_writer').val();
+        data.r_writer=[[${session.member.m_id}]];
+        console.log('data:', data);
+        $.ajax({
+            method: 'post',   // get, post, delete, put(전체컬럼변경), patch(일부컬럼변경)
+            url: '/board/reply',
+            //data: data  // data: {r_bnum:100, r_contents:'블라블라', r_writer:'dbstlr2'}
+            //data: $('#rform').serialize(), // ?r_contents=댓글3&r_bnum=38&...
+            //1. urlEncodede 방식 (get, post): 특수문자는 못 넘김
+            //contentType: "application/x-www-form-urlencoded", //header 의 contentType 기본값
+            //2. json 방식(post 만): 서버에서 받을때 @RequestBody
+            data: JSON.stringify(data),  //{"r_bnum":38, "r_contents":"댓글1"}
+            contentType: "application/json;charset=UTF-8", //json 데이터 넘김
+
+
+            //dataType 생략가능 (서버에서 header 의 dataType 을 자동인식)
+            //dataType: 'json', //'text(html)', 'xml', 'jsonp'
+        }).done(res=> console.log('res:',res))
+          .fail(err=> console.log('err:',err));//ajax end
+    } //replyInsert end
+</script>
+</body>
+</html>
