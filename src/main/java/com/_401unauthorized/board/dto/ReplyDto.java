@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +14,10 @@ import lombok.NoArgsConstructor;
 
 
 public class ReplyDto {
-    private int r_bnum;
-    private String r_contents;
-    private String r_writer;
+    //스프링 Validation
+    private int r_num; //PK
+    private int r_bnum; //FK(원글 번호)
+    private String r_contents; //댓글 내용
+    private String r_writer; //FK(작성자 id)
+    private LocalDateTime r_date;
 }

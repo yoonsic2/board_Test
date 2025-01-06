@@ -3,6 +3,7 @@ package com._401unauthorized.board.service;
 import com._401unauthorized.board.common.Paging;
 import com._401unauthorized.board.dao.BoardDao;
 import com._401unauthorized.board.dto.BoardDto;
+import com._401unauthorized.board.dto.ReplyDto;
 import com._401unauthorized.board.dto.SearchDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,5 +73,17 @@ public class BoardService {
 
     public boolean boardDelete(Integer bNum) {
         return boardDao.boardDelete(bNum);
+    }
+
+    public List<ReplyDto> getReplyList(Integer bNum) {
+        return boardDao.getReplyList(bNum);
+    }
+
+    public List<ReplyDto> insertReply(ReplyDto replyDto) {
+        List<ReplyDto> rList = null;
+        if(boardDao.insertReply(replyDto)){
+            rList = boardDao.getReplyList(replyDto.getR_bnum());
+        }
+        return rList;
     }
 }

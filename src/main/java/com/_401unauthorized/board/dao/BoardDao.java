@@ -1,6 +1,7 @@
 package com._401unauthorized.board.dao;
 
 import com._401unauthorized.board.dto.BoardDto;
+import com._401unauthorized.board.dto.ReplyDto;
 import com._401unauthorized.board.dto.SearchDto;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -29,4 +30,8 @@ public interface BoardDao {
 
     @Delete("DELETE FROM BOARD WHERE B_NUM=#{bNum}")
     boolean boardDelete(Integer bNum);
+
+    List<ReplyDto> getReplyList(Integer bNum);
+
+    boolean insertReply(ReplyDto replyDto);
 }

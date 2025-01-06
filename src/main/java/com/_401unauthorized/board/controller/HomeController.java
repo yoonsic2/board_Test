@@ -14,7 +14,8 @@ public class HomeController {
         if (session.getAttribute("urlPrior_login") == null) {
             session.removeAttribute("urlPrior_login");
         }
-
+        session.removeAttribute("sDto");
+        session.removeAttribute("pageNum");
         return "index"; //index.html
     }
 

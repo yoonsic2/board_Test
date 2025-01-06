@@ -8,8 +8,8 @@
 		<title>Title</title>
 		<script th:inline="javascript">
 			const m = [[${msg}]]
-			if(m!=null){
-				alert(m);
+			window.onload=()=>{
+				msgPrint();
 			}
 		</script>
 		<link rel="stylesheet" th:href="@{/css/style.css}">

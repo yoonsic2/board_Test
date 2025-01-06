@@ -8,7 +8,6 @@ import com._401unauthorized.board.service.BoardService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ public class BoardController {
 
     //localhost/board/ or localhost/board
     @GetMapping({"/", ""})
-    public String list(SearchDto sDto, Model model) {
+    public String list(SearchDto sDto, Model model, HttpSession session) {
         log.info("=====before sDto:{}", sDto);
         //서비스-->DB -->게시글들
         if (sDto.getPageNum() == null) {
@@ -54,6 +53,16 @@ public class BoardController {
             //페이지 정보
 
             String pageHtml = bSer.getPaging(sDto);
+
+            //상세보기에서 게시글 목록으로 돌아가기 위해서
+            if(sDto.getColname()!=null) {
+                session.setAttribute("sDto", sDto);
+                log.info("=====검색중이였다면 sDto 세션에 저장");
+            }else {
+                session.removeAttribute("sDto");
+                //페이지 번호만 저장
+                session.setAttribute("pageNum", sDto.getPageNum());
+            }
             model.addAttribute("paging", pageHtml);
             model.addAttribute("bList", bList); //js(json), each문
 
@@ -77,16 +86,6 @@ public class BoardController {
             rttr.addAttribute("msg", b_num+"번 삭제 실패");
             return "redirect:/board/detail?b_num="+b_num;
         }
-    }
-
-    @PostMapping("/reply")
-    @ResponseBody
-    public String insertReply(@RequestBody ReplyDto replyDto, HttpSession session) {
-        log.info("=====insert r_bnum:{}", replyDto.getR_bnum());
-        log.info("=====insert r_contents:{}", replyDto.getR_contents());
-        String id = ((MemberDto)session.getAttribute("member")).getM_id();
-        log.info("=====insert r_writer:{}", id);
-        return "성공";
     }
 
     @GetMapping("/write")
@@ -113,12 +112,14 @@ public class BoardController {
         if (b_num == null || b_num < 1) {
             return "redirect:/board";
         }
-        BoardDto board = bSer.getBoardDetail(b_num);
+        BoardDto board = bSer.getBoardDetail(b_num); //원글 1개
         log.info("board:{}", board); // 제목, 글쓴이, 내용, 날짜. 조회수
         if (board == null) {
             return "redirect:/board";
         } else {
+            //List<ReplyDto> rList = bSer.getReplyList(b_num); // 댓글 n개
             model.addAttribute("board", board);
+            //model.addAttribute("rList", rList);
             return "board/detail";
         }
     }
