@@ -17,6 +17,7 @@ import java.lang.reflect.Member;
 @Slf4j
 @RequestMapping("/member")
 @RequiredArgsConstructor
+
 public class MemberController {
     //    @Autowired
     private final MemberService mSer;

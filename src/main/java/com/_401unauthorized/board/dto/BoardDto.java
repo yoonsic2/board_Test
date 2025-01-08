@@ -5,9 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,4 +24,6 @@ public class BoardDto {
     private String b_writer;
     private LocalDateTime b_date;  // 시간조작 편리
     private String b_views;
+
+    private List<MultipartFile> attachments;
 }

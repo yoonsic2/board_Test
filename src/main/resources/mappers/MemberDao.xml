@@ -21,13 +21,16 @@ ${변수명}, ${필드명}, ${속성명} : 문자열일경우 ''을 붙이지 �
         VALUES(#{m_id}, #{m_pw}, #{m_name}, #{m_birth}, #{m_address}, default)
     </insert>
 
+
     <select id="isUsedId" parameterType="String" resultType="java.lang.Boolean">
         SELECT COUNT(*) FROM MEMBER WHERE M_ID=#{id}
     </select>
 
+
     <select id="getSecurityPw" parameterType="String" resultType="java.lang.String">
         SELECT M_PW FROM MEMBER WHERE M_ID=#{mId}
     </select>
+
 
     <select id="getMemberInfo" resultType="com._401unauthorized.board.dto.MemberDto">
         SELECT M_ID, M_NAME, M_POINT, G_NAME
@@ -36,4 +39,5 @@ ${변수명}, ${필드명}, ${속성명} : 문자열일경우 ''을 붙이지 �
         ON M.M_POINT BETWEEN G.G_LOWPOINT AND G.G_HIGHPOINT
         WHERE M_ID=#{mId}
     </select>
+
 </mapper>

@@ -6,14 +6,17 @@
         INSERT INTO BOARD VALUES(NULL, #{b_title}, #{b_contents}, #{b_writer}, DEFAULT, DEFAULT)
     </insert>
 
+
     <insert id="insertReply">
         INSERT INTO REPLY(R_BNUM, R_CONTENTS, R_WRITER, R_DATE)
         VALUES(#{r_bnum}, #{r_contents}, #{r_writer}, DEFAULT)
     </insert>
 
+
     <select id="getBoardList" parameterType="HashMap" resultType="com._401unauthorized.board.dto.BoardDto">
         SELECT B_NUM, B_TITLE, B_WRITER, B_DATE, B_VIEWS FROM BOARD ORDER BY B_NUM DESC LIMIT #{startIndex}, #{pageSize}
     </select>
+
 
     <select id="getBoardListSearch" resultType="com._401unauthorized.board.dto.BoardDto">
         SELECT B_NUM, B_TITLE, B_WRITER, B_DATE, B_VIEWS FROM BOARD
@@ -27,6 +30,7 @@
         </choose>
     </select>
 
+
     <select id="getBoardCount" resultType="java.lang.Integer">
         select count(*) from board
         <if test="colname!=null and colname!=''">
@@ -34,15 +38,18 @@
         </if>
     </select>
 
+
     <select id="getBoardDetail" resultType="com._401unauthorized.board.dto.BoardDto">
         select b_num, b_title, b_contents, b_writer, b_views,
                date_format(b_date, '%Y-%m-%d %H:%i:%s') b_date
                from board where b_num= #{bNum}
     </select>
 
+
     <select id="getReplyList" resultType="com._401unauthorized.board.dto.ReplyDto">
         SELECT R_WRITER, R_CONTENTS, R_DATE FROM REPLY
         WHERE R_BNUM=#{bNum} ORDER BY R_DATE DESC
     </select>
+
 
 </mapper>

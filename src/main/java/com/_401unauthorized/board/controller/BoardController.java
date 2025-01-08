@@ -1,8 +1,6 @@
 package com._401unauthorized.board.controller;
 
 import com._401unauthorized.board.dto.BoardDto;
-import com._401unauthorized.board.dto.MemberDto;
-import com._401unauthorized.board.dto.ReplyDto;
 import com._401unauthorized.board.dto.SearchDto;
 import com._401unauthorized.board.service.BoardService;
 import jakarta.servlet.http.HttpSession;
@@ -11,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -94,10 +93,24 @@ public class BoardController {
     }
 
     @PostMapping("/write")
+    //public String write(BoardDto board, @RequestPart List<MultipartFile> attachments) {
     public String write(BoardDto board) {
-        //DB에 글을 저장
-        return "redirect:/board/list";
-    }
+        log.info("왔냐?????????????????????????????????????????????????");
+//        log.info("=====write board:{}", board);  //b_writer, b_title, b_contents
+//        log.info("=====write attachments:{}", attachments.size());  //첨부파일 명
+//        for (MultipartFile file : attachments) {
+//            log.info("=====file:{}", file.getOriginalFilename());
+//        }
+//        return "redirect:/board/list";
+        log.info("=====write board:{}", board);
+        log.info("=====write board.attachments:{}", board.getAttachments().size());
+        for(MultipartFile file : board.getAttachments()) {
+            log.info("=====file:{}", file.getOriginalFilename());
+            log.info("=====file.getSize():{}", file.getSize());
+        }
+        return "redirect:/board";
+        }
+
 
     @GetMapping("/detail")
     public String detailParam(@RequestParam("b_num") Integer b_num, Model model) {

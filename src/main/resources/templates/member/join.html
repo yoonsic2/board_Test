@@ -5,6 +5,7 @@
     <title>Title</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <script defer th:src="@{/js/index.js}"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script th:inline="javascript">
     const m = [[${msg}]]
     window.onload=()=>{
@@ -37,6 +38,45 @@
     <th:block th:replace="~{fragments::footer}"></th:block>
   </div>
   <script>
+    let isCheck=false;
+    $('#checkId').click(function() {
+      let id = $('#m_id').val();
+      if(id == '') {
+        $('#checkMsg').html('아이디 입력해줘...').css('color','red');
+        $('#m_id').focus();
+        return;
+      } else {
+        let sendId = {m_id: id}
+        $.ajax({
+          method: 'get',
+          url:'/member/idcheck',
+          // 쿼리스트링 방법
+          // url: '/member/idcheck?m_id='+id,
+
+          data: {m_id: id}, // sendId
+          // dataType : 'json' < 서버로부터 돌려받을 데이터(생략가능) 서버가 판단해줌
+        }).done(function(resp, status, xhr) {
+          console.log('resp:',resp);
+          console.log('status:',status);
+          console.log('xhr:',xhr);
+          //$('#checkMsg').html(resp).css('color','green')
+          if(resp == true){
+            $('#checkMsg').html('사용가능한 아이디 입니다.').css('color','green')
+            isCheck = true;
+          }else{
+            $('#checkMsg').html('사용불가한 아이디 입니다.').css('color','red')
+            isCheck = false;
+          }
+          //isCheck = true;
+        }).fail((err, status) => {
+          console.log('err:',err)
+          console.log('status:',status)
+          //$('#checkMsg').html(err.responseText).css('color','red')
+          isCheck = false;
+        })
+      }
+    })
+
     //jquery validation 활용해서 유효성 체크해보세요~
     function check(){
       const joinFrm = document.joinFrm;

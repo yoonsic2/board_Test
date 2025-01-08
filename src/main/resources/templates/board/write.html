@@ -3,8 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!--  axios  -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script defer th:src="@{/js/index.js}"></script>
+    <script th:inline="javascript">
+        const m = [[${msg}]]
+        const mb = [[${session.member}]]
+        $(() => {
+            msgPrint()
+            loginStatus()
+        })
+    </script>
 </head>
 <body>
-    <h1>board/write.html</h1>
+<div class="wrap">
+    <th:block th:replace="~{fragments::header}"></th:block>
+    <section>
+        <div class="content">
+            <!--  첨부파일 하려면 메소드 enct타입 필수  -->
+            <form action="/board/write" method="post" class="write-form" enctype="multipart/form-data">
+                <div class="user-info">
+                    <div class="user-info-sub">
+                        <p th:text="|등급 [${session.member.g_name}]|"></p>
+                        <p th:text="|POINT [${session.member.m_point}]|"></p>
+                    </div>
+                </div>
+                <h2 class="login-header"> 글쓰기 </h2>
+                <!-- 로그인한 id(숨김), 제목, 내용, 첨부파일 -->
+                <input type="hidden" name="b_writer" th:value="${session.member?.m_id}">
+                <input type="text" name="b_title" class="write-input" autofocus placeholder="제목" required>
+                <textarea rows="15" name="b_contents" placeholder="내용을 적어주세요." class="write-input ta?">
+                </textarea>
+                <div class="filebox">
+                    <label for="attachments"> 업로드 </label>
+                    <input type="file" name="attachments" id="attachments" multiple>
+                    <input type="text" class="upload-name" value="파일선택" readonly>
+                </div>
+                <div class="btn-area">
+                    <input type="submit" class="btn-write" value="W">
+                    <input type="reset" class="btn-write" value="R">
+                    <input type="button" class="btn-write" value="B" onclick="backbtn()">
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <th:block th:replace="~{fragments::footer}"></th:block>
+</div> <!-- end wrap -->
+<script th:inline="javascript">
+    $('#attachments').on('change', function (){
+        console.log($('#attachments'))
+        let files = $('#attachments')[0].files;
+        console.log('files:',files); //파일 리스트
+        let fileName = '';
+        if(files.length > 1){
+            fileName = files[0].name + '외 '+(files.length-1)+'개';
+        }else if(files.length == 1){
+            fileName = files[0].name;
+        }else{
+            fileName = '파일 선택';
+        }
+        $('.upload-name').val(fileName);
+    });
+
+    function backbtn(){
+        let url = "/board?"
+        let col = [[${session.sDto?.colname}]];
+        let keyw = [[${session.sDto?.keyword}]];
+        if(col == null){
+            url += `pageNum=[[${session.pageNum}]]`;
+        }else{
+            //colname, keyword는 문자열이므로 백틱 안에 타임리프 요소를 쓰면 'colname="b_title"' 로 들어감 주의
+            url+='colname='+[[${session.sDto?.colname}]]+'&keyword='+[[${session.sDto?.keyword}]];
+            url+='&pageNum='+[[${session.sDto?.pageNum}]];
+        }
+        location.href=url;
+    }
+</script>
 </body>
 </html>

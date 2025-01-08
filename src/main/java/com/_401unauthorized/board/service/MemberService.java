@@ -46,4 +46,10 @@ public class MemberService {
 
         return mDao.join(mDto);  // 회원가입 성공시: true, 실패하면: false
     }
+
+
+    public boolean isUsedId(String mId) {
+        return mDao.isUsedId(mId);
+
+    }
 }
