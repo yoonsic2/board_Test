@@ -13,6 +13,21 @@
     </insert>
 
 
+    <!-- 오라클은 selectkey 만 가능, MySQL은 selectkey, useGeneratedkeys(권장) 가능 -->
+    <insert id="boardWriteSelectKey" useGeneratedKeys="true" keyProperty="b_num">
+        INSERT INTO BOARD VALUES (NULL, #{b_title}, #{b_contents}, #{b_writer}, DEFAULT, DEFAULT)
+<!--        <selectKey keyProperty="b_num" resultType="int" order="AFTER">-->
+<!--            select last_insert_id()-->
+<!--        </selectKey>-->
+    </insert>
+
+
+    <insert id="fileInsertMap" parameterType="HashMap">
+        INSERT INTO BOARDFILE
+        VALUES (NULL, #{b_num}, #{oriFileName}, #{sysFileName})
+    </insert>
+
+
     <select id="getBoardList" parameterType="HashMap" resultType="com._401unauthorized.board.dto.BoardDto">
         SELECT B_NUM, B_TITLE, B_WRITER, B_DATE, B_VIEWS FROM BOARD ORDER BY B_NUM DESC LIMIT #{startIndex}, #{pageSize}
     </select>

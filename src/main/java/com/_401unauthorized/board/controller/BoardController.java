@@ -1,6 +1,7 @@
 package com._401unauthorized.board.controller;
 
 import com._401unauthorized.board.dto.BoardDto;
+import com._401unauthorized.board.dto.BoardFile;
 import com._401unauthorized.board.dto.SearchDto;
 import com._401unauthorized.board.service.BoardService;
 import jakarta.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
 import java.util.List;
 
 @Controller
@@ -21,6 +23,12 @@ import java.util.List;
 
 public class BoardController {
     public final BoardService bSer;
+
+    // 업로드 된 이미지 링크 테스트
+    @GetMapping("/viewimg")
+    public String viewImg(Model model) {
+        return "board/viewimg";
+    }
 
     //localhost/board/ or localhost/board
     @GetMapping({"/", ""})
@@ -94,8 +102,21 @@ public class BoardController {
 
     @PostMapping("/write")
     //public String write(BoardDto board, @RequestPart List<MultipartFile> attachments) {
-    public String write(BoardDto board) {
-        log.info("왔냐?????????????????????????????????????????????????");
+    public String write(BoardDto board, HttpSession session, RedirectAttributes rttr) {
+        // tomcat rootPath: main/webapp
+        // realPath: main/webapp/upload
+
+        //루트 확인
+//        String realPath = session.getServletContext().getRealPath("/");
+//        log.info("rootPath:{}", realPath);
+//        realPath+="upload/";
+//        log.info("realPath:{}", realPath);
+//        File dir = new File(realPath);
+//        if(!dir.isDirectory()){
+//            //upload 폴더가 없으면 true
+//            dir.mkdir();
+//        }
+
 //        log.info("=====write board:{}", board);  //b_writer, b_title, b_contents
 //        log.info("=====write attachments:{}", attachments.size());  //첨부파일 명
 //        for (MultipartFile file : attachments) {
@@ -107,8 +128,16 @@ public class BoardController {
         for(MultipartFile file : board.getAttachments()) {
             log.info("=====file:{}", file.getOriginalFilename());
             log.info("=====file.getSize():{}", file.getSize());
+            log.info("=====file.getSize():{}", file.isEmpty());
         }
-        return "redirect:/board";
+        boolean result = bSer.boardWrite(board, session);
+        if(result) {
+            rttr.addFlashAttribute("msg", "글쓰기 성공");
+            return "redirect:/board"; //글목록
+        }else {
+            rttr.addFlashAttribute("msg", "글쓰기 실패");
+            return "redirect:/board/write"; //글쓰기 창
+        }
         }
 
 
@@ -130,7 +159,12 @@ public class BoardController {
         if (board == null) {
             return "redirect:/board";
         } else {
+            // 댓글 리스트 가져오기 동기 or 비동기
             //List<ReplyDto> rList = bSer.getReplyList(b_num); // 댓글 n개
+            // 첨부파일 리스트 가져오기
+            List<BoardFile> bfList = bSer.getBfLisr(b_num);  // 0개~n개, null
+            log.info("**********bfList.size:{}개, {}", bfList.size(), bfList);
+            model.addAttribute("bfList", bfList);
             model.addAttribute("board", board);
             //model.addAttribute("rList", rList);
             return "board/detail";

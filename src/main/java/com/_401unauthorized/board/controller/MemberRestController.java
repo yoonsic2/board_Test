@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,7 +32,7 @@ public class MemberRestController {
     @GetMapping("/idcheck")
     public ResponseEntity<Boolean> idcheck(String m_id) {
         log.info("idcheck m_id:{}", m_id);
-         return ResponseEntity.ok(!memberService.isUsedId(m_id));
+        return ResponseEntity.ok(!memberService.isUsedId(m_id));
         //if(!memberService.isUsedId(m_id)) {
         //    return ResponseEntity.ok().body("사용할 수 있는 ID지롱!");
         //} else {

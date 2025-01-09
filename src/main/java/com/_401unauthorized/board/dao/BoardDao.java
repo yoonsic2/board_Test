@@ -1,6 +1,7 @@
 package com._401unauthorized.board.dao;
 
 import com._401unauthorized.board.dto.BoardDto;
+import com._401unauthorized.board.dto.BoardFile;
 import com._401unauthorized.board.dto.ReplyDto;
 import com._401unauthorized.board.dto.SearchDto;
 import org.apache.ibatis.annotations.Delete;
@@ -34,4 +35,11 @@ public interface BoardDao {
     List<ReplyDto> getReplyList(Integer bNum);
 
     boolean insertReply(ReplyDto replyDto);
+
+    boolean boardWriteSelectKey(BoardDto board);
+
+    boolean fileInsertMap(Map<String, String> fMap);
+
+    @Select("SELECT bf_orifilename, bf_sysfilename FROM BOARDFILE WHERE bf_bnum=#{bNum}")
+    List<BoardFile> getBfList(Integer bNum);
 }

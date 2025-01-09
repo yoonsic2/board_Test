@@ -34,10 +34,10 @@
                 <!-- 로그인한 id(숨김), 제목, 내용, 첨부파일 -->
                 <input type="hidden" name="b_writer" th:value="${session.member?.m_id}">
                 <input type="text" name="b_title" class="write-input" autofocus placeholder="제목" required>
-                <textarea rows="15" name="b_contents" placeholder="내용을 적어주세요." class="write-input ta?">
+                <textarea rows="15" name="b_contents" id="b_contents" placeholder="내용을 적어주세요." class="write-input ta?">
                 </textarea>
                 <div class="filebox">
-                    <label for="attachments"> 업로드 </label>
+                    <label for="attachments"> 파일첨부 </label>
                     <input type="file" name="attachments" id="attachments" multiple>
                     <input type="text" class="upload-name" value="파일선택" readonly>
                 </div>
@@ -53,6 +53,11 @@
     <th:block th:replace="~{fragments::footer}"></th:block>
 </div> <!-- end wrap -->
 <script th:inline="javascript">
+    const textarea = document.getElementById('b_contents');
+    //  textarea 초기화: 1행 1열부터 입력하도록
+    textarea.value = ''; // 빈 값으로 설정
+    textarea.setSelectionRange(0, 0); // 커서를 1행 1열로 이동
+
     $('#attachments').on('change', function (){
         console.log($('#attachments'))
         let files = $('#attachments')[0].files;

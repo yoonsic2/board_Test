@@ -22,6 +22,18 @@ ${변수명}, ${필드명}, ${속성명} : 문자열일경우 ''을 붙이지 �
     </insert>
 
 
+    <update id="updateMemberPoint" parameterType="memberDto">
+        UPDATE MEMBER SET m_point = #{m_point} WHERE m_id = #{m_id}
+    </update>
+
+    <!-- <![CDATA[ ]]> 의 예시 -->
+    <select id="getPointOverMember" parameterType="Integer">
+        <![CDATA[
+        SELECT * FROM MEMBER WHERE m_point >= #{point}
+        ]]>
+    </select>
+
+
     <select id="isUsedId" parameterType="String" resultType="java.lang.Boolean">
         SELECT COUNT(*) FROM MEMBER WHERE M_ID=#{id}
     </select>

@@ -15,6 +15,7 @@
             loginStatus()
         })
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"/>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script defer th:src="@{/js/index.js}"></script>
 </head>
@@ -53,7 +54,25 @@
                 </div>
             </div>
         </div>
-
+        <div>
+            <div class="t_content p-15 file_h">FILES</div>
+            <div class="d_content p-85 file_h" style="overflow: auto;">
+                <!--   -->
+                <th:block th:if="${#lists.isEmpty(bfList)}">
+                    첨부된 파일이 없습니다.
+                </th:block>
+                <th:block th:unless="${#lists.isEmpty(bfList)}">
+                    <th:block th:each="file:${bfList}">
+             <!--<img th:src="@{|/upload/${file.getBf_sysfilename()}|}" width="100">-->
+                        <a th:href="@{|/board/download?bf_sysfilename=${file.bf_sysfilename}&bf_orifilename=${file.bf_orifilename}|}">
+                            <i class='far fa-file' style='font-size:30px'></i>
+                            <span th:text="${file.bf_orifilename}">
+                            </span>
+                        </a>
+                    </th:block>
+                </th:block>
+            </div>
+        </div>
         <!-- 버튼 영역 -->
         <div class="btn-area">
             <button class="btn-write" id="upbtn"

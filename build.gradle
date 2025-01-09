@@ -41,6 +41,9 @@ dependencies {
     //Spring-security-core: 비번 암호화 (전체적인 보안관리)
     implementation 'org.springframework.security:spring-security-core'
 
+    //commons-io: java 에서 파일 및 스트림 처리와 관련된 작업
+    implementation 'commons-io:commons-io:2.16.1'
+
 }
 
 tasks.named('test') {

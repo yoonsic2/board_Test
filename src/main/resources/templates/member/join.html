@@ -44,15 +44,14 @@
       if(id == '') {
         $('#checkMsg').html('아이디 입력해줘...').css('color','red');
         $('#m_id').focus();
-        return;
+        return false;
       } else {
         let sendId = {m_id: id}
         $.ajax({
           method: 'get',
-          url:'/member/idcheck',
+          url: '/member/idcheck',
           // 쿼리스트링 방법
           // url: '/member/idcheck?m_id='+id,
-
           data: {m_id: id}, // sendId
           // dataType : 'json' < 서버로부터 돌려받을 데이터(생략가능) 서버가 판단해줌
         }).done(function(resp, status, xhr) {
