@@ -3,6 +3,8 @@ package com._401unauthorized.board.common;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,21 +102,38 @@ public class FileManager {
 			throws IOException {
 		log.info("fileDownload()");
 		// 파일 저장 경로
-		String realpath = session.getServletContext().getRealPath("/");
+		String realpath = session.getServletContext().getRealPath("/");  // ..../webapp/
+		log.info("rootpath={}", realpath);
 		realpath += "upload/" + bfile.getBf_sysfilename();
 		// 실제 파일이 저장된 하드디스크까지 경로를 수립.
 		InputStreamResource fResource = new InputStreamResource(new FileInputStream(realpath));
 
+		//MIME (Multipurpose Internet Mail Extensions) 타입
+		//인터넷에서 다양한 유형의 파일(텍스트, 이미지, 비디오, 오디오 등)을 전송하기 위해 사용되는 표준 형식
+		//주 타입/하위 타입
+		//text/plain: 일반 텍스트 파일.
+		//image/jpeg: JPEG 형식의 이미지.
+		//application/json: JSON 형식의 데이터.
+		//application/octet-stream: 일반 바이너리 파일 (주로 다운로드 용도로 사용).
+		String mimeType = Files.probeContentType(Paths.get(realpath));
+		log.info("==========mimeType={}", mimeType);
 		// 파일명이 한글인 경우의 처리(UTF-8로 인코딩)
 		String fileName = URLEncoder.encode(bfile.getBf_orifilename(), "UTF-8");
-		return ResponseEntity.ok()
-				//다운로드 방식 
-				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
-				//이미지 브라우저 열기
-				//.contentType(MediaType.IMAGE_JPEG)
-				//브라우저는 항상 서버로부터 최신 버전의 리소스를 다운로드
-				.cacheControl(CacheControl.noCache()).body(fResource);
+		if (mimeType != null && mimeType.startsWith("image")) {
+			// 이미지 파일이면 브라우저로 열기
+			return ResponseEntity.ok()
+					.contentType(MediaType.parseMediaType(mimeType))
+					.cacheControl(CacheControl.noCache())
+					.body(fResource);
+		} else {
+			// 이미지 파일이 아니면 다운로드
+			return ResponseEntity.ok()
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)  //다운로드
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+					//브라우저는 항상 서버로부터 최신 버전의 리소스를 다운로드
+					.cacheControl(CacheControl.noCache())
+					.body(fResource);
+		}
 	}  //fileDownload end
 	
 	public void fileDelete(String[] sysfiles, HttpSession session) {

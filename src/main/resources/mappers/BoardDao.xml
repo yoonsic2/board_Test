@@ -67,4 +67,32 @@
     </select>
 
 
+    <!--원글+첨부파일가져오는거-->
+    <select id="getBoardDetailWithFiles" resultMap="boardResult">
+            select b.b_num, b.b_writer, b.b_title, b.b_contents, b.b_date, bf.bf_orifilename, bf.bf_sysfilename
+            from board b
+                     left outer join boardfile bf
+                                     on b.b_num = bf.bf_bnum
+            where b.b_num = #{bNum}
+        </select>
+        <!--boardResult 매핑-->
+        <resultMap id="boardResult" type="boardDto">
+            <!--property:필드명/ column:컬럼명-->
+            <id property="b_num" column="b_num"/>
+            <result property="b_title" column="b_title"/>
+            <result property="b_contents" column="b_contents"/>
+            <result property="b_writer" column="b_writer"/>
+            <result property="b_date" column="b_date"/>
+            <!--        <collection property="boardFileList" javaType="ArrayList" ofType="BoardFile">-->
+            <!--            &lt;!&ndash;<id property="bf_num" column="bf_num"/>&ndash;&gt;-->
+            <!--        <result property="bf_orifilename" column="bf_orifilename"/>-->
+            <!--        <result property="bf_sysfilename" column="bf_sysfilename"/>-->
+            <!--        </collection>-->
+            <!--리스트 내에 또 리스트가 존재한다면 중첩하지말고 이렇게 또 까버리자!-->
+            <collection property="boardFileList" resultMap="mapForBoardFile"/>
+        </resultMap>
+        <resultMap id="mapForBoardFile" type="boardFile">
+            <result property="bf_orifilename" column="bf_orifilename"/>
+            <result property="bf_sysfilename" column="bf_sysfilename"/>
+        </resultMap>
 </mapper>

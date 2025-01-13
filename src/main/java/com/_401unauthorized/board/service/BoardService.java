@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -76,12 +77,39 @@ public class BoardService {
         return boardDao.getBoardListSearch(sDto);
     }
 
-    public BoardDto getBoardDetail(Integer bNum) {
-        return boardDao.getBoardDetail(bNum);
+    public BoardDto getBoardDetail(Integer b_num) {
+        // return boardDao.getBoardDetail(b_num);
+        return boardDao.getBoardDetailWithFiles(b_num);
     }
 
-    public boolean boardDelete(Integer bNum) {
-        return boardDao.boardDelete(bNum);
+    @Transactional
+    public void boardDelete(Integer bNum, HttpSession session) {
+        // 1. 자식 데이터 삭제 (댓글리스트)
+        List<ReplyDto> replyDtoList = boardDao.getReplyList(bNum);
+        if(replyDtoList != null && replyDtoList.size() > 0){
+            if(boardDao.deleteReply(bNum) == false){
+                log.info("===deleteReply 예외발생");
+                throw new RuntimeException();  // rollback
+            }
+        }
+        // 2. 자식 데이터 삭제 (파일리스트)
+        String[] sysfiles = boardDao.getSysFileName(bNum);
+        if(sysfiles != null && sysfiles.length > 0){
+            if(boardDao.deleteBoardFile(bNum) == false){
+                log.info("====deleteBoardFile");
+                throw new RuntimeException();
+            }
+        }
+        // 3. 부모 데이터 삭제 (원글)
+        if(!boardDao.boardDelete(bNum)){
+            log.info("===boardDelete 예외발생");
+            throw new RuntimeException();
+        }
+        // 4. upload 폴더에 파일 삭제
+        if(sysfiles.length > 0){
+            fm.fileDelete(sysfiles, session);  // session or realPath
+        }
+        //return true;  // 삭제 성공
     }
 
     public List<ReplyDto> getReplyList(Integer bNum) {
@@ -127,11 +155,11 @@ public class BoardService {
         }
     }
 
-    public List<BoardFile> getBfLisr(Integer bNum) {
+    public List<BoardFile> getBfList(Integer bNum) {
         return boardDao.getBfList(bNum);
     }
 
     public ResponseEntity<Resource> fileDownload(BoardFile boardFile, HttpSession session) throws IOException {
         return fm.fileDownload(boardFile, session);
     }
-}
+} 

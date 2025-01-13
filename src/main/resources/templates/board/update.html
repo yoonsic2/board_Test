@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="wrap">
+    <th:block th:replace="~{fragments::header}"></th:block>
+    <section>
+        <div class="content">
+            <form action="/board/update" th:object="${boardDto}" class="write-form" method="post" enctype="multipart/form-data">
+                <div class="user-info">
+                    <div class="user-info-sub">
+                        <p th:text="|등급[${session.member?.g_name}]|"></p>
+                        <p th:text="|POINT [${session.member?.m_point}]|"></p>
+                    </div>
+                </div>
+                <h3 class="login-header">글수정</h3>
+                <!-- 로그인한 id(숨김), 제목, 내용, 파일첨부 -->
+                <!--<input type="hidden" name="b_writer" th:value="${session.member?.m_id}">-->
+                <!--form 태그에 오브젝트 설정-->
+                <input type="hidden" th:field="*{b_num}">
+                <input type="text" th:field="*{b_title}" class="write-input" autofocus placeholder="제목을 입력하세요" required>
+                <textarea rows="15" th:field="*{b_contents}" placeholder="내용을 입력하세요." class="write-input ta">
+                  </textarea>
+                <!-- detail.html 첨부파일 영역 , 첨부된 파일 목록 출력-->
+                <div class="t_content p-15 file_h">FILES</div>
+                <div class="d_content p-85 file_h" style="overflow:auto;">
+                    <th:block th:if="*{#lists.isEmpty(boardFileList)}">
+                        첨부된 파일이 없습니다.
+                    </th:block>
+                    <th:block th:unless="*{#lists.isEmpty(boardFileList)}">
+                        <th:block th:each="file:*{boardFileList}">
+                            <!-- <img th:src="@{|/upload/${file.getBf_sysfilename()}|}" width="100" />-->
+                            <a class="file-title" th:href="@{|/board/download?bf_sysfilename=${file.bf_sysfilename}&bf_orifilename=${file.bf_orifilename}|}">
+                                <i class='far fa-file' style='font-size:24px'></i>
+                                <span th:text="${file.bf_orifilename}"></span>
+                            </a>
+                        </th:block>
+                    </th:block>
+                </div>
+                <!-- 새로운 파일 첨부 -->
+                <div class="filebox">
+                    <label for="attachments"> 업로드 </label>
+                    <input type="file" name="attachments" id="attachments" multiple>
+                    <input type="text" class="upload-name" value="파일선택" readonly>
+                </div>
+                <div class="btn-area">
+                    <input type="submit" class="btn-write" value="W">
+                    <input type="submit" class="btn-write" value="R">
+                    <input type="submit" class="btn-write" value="B" onclick="backBtn()">
+                </div>
+            </form>
+        </div>
+    </section>
+    <th:block th:replace="~{fragments::footer}"></th:block>
+</div> <!— wrap end —>
+
+</body>
+</html>

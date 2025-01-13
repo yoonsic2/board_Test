@@ -26,4 +26,5 @@ public class BoardDto {
     private String b_views;
 
     private List<MultipartFile> attachments;
+    private List<BoardFile> boardFileList;
 }

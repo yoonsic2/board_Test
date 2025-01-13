@@ -5,6 +5,8 @@ import com._401unauthorized.board.dto.MemberDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 
 public interface MemberDao {
@@ -24,4 +26,8 @@ public interface MemberDao {
     String getSecurityPw(String mId);
 
     void updateMemberPoint(MemberDto memberDto);
+
+    //jUnit 테스트용
+    @Select("SELECT * FROM MEMBER")
+    List<MemberDto> getAllMember();
 }

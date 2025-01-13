@@ -36,43 +36,47 @@
                 <h2 class="login-header">상세 보기</h2>
                 <div>
                     <div class="t_content p-15">NUM</div>
-                    <div class="d_content p-85" th:text="${board.b_num}"> 글번호</div>
+                    <div class="d_content p-85" th:text="${board.b_num}">글번호</div>
                 </div>
                 <div>
                     <div class="t_content p-15">WRITER</div>
-                    <div class="d_content p-35" th:text="${board.b_writer}"> 글쓴이</div>
+                    <div class="d_content p-35" th:text="${board.b_writer}">글쓴이</div>
                     <div class="t_content p-15">DATE</div>
-                    <div class="d_content p-35" th:text="${board.b_date}"> 등록일시</div>
+                    <div class="d_content p-35" th:text="${board.b_date}">등록일시</div>
                 </div>
                 <div>
                     <div class="t_content p-15">TITLE</div>
-                    <div class="d_content p-85" th:text="${board.b_title}"> 제목</div>
+                    <div class="d_content p-85" th:text="${board.b_title}">제목</div>
                 </div>
                 <div>
                     <div class="t_content p-15 content_h">CONTENTS</div>
-                    <div class="d_content p-85 content_h" th:text="${board.b_contents}"> 글내용</div>
+                    <div class="d_content p-85 content_h" th:text="${board.b_contents}">글내용</div>
+                    <!-- summernote form태그없을때는 div, form태그시는 textarea -->
                 </div>
             </div>
-        </div>
-        <div>
-            <div class="t_content p-15 file_h">FILES</div>
-            <div class="d_content p-85 file_h" style="overflow: auto;">
-                <!--   -->
-                <th:block th:if="${#lists.isEmpty(bfList)}">
-                    첨부된 파일이 없습니다.
-                </th:block>
-                <th:block th:unless="${#lists.isEmpty(bfList)}">
-                    <th:block th:each="file:${bfList}">
-             <!--<img th:src="@{|/upload/${file.getBf_sysfilename()}|}" width="100">-->
-                        <a th:href="@{|/board/download?bf_sysfilename=${file.bf_sysfilename}&bf_orifilename=${file.bf_orifilename}|}">
-                            <i class='far fa-file' style='font-size:30px'></i>
-                            <span th:text="${file.bf_orifilename}">
-                            </span>
-                        </a>
+            <!-- //form 택의 기본 값 : 특수문자 넣을 수 없음 -->
+            <!-- <form enctype="application/x-www-form-urlencoded">-->
+            <!-- <input type="text" value="{sdfd}">-->
+            <!-- </form>-->
+            <!-- 첨부파일 영역 -->
+            <div>
+                <div class="t_content p-15 file_h">FILES</div>
+                <div class="d_content p-85 file_h" style="overflow: auto;">
+                    <th:block th:if="${#lists.isEmpty(board.boardFileList)}">
+                        첨부 된 파일이 없슴둥ㅠ_ㅠ
                     </th:block>
-                </th:block>
+                    <th:block th:unless="${#lists.isEmpty(board.boardFileList)}">
+                        <th:block th:each="file:${board.boardFileList}">
+                            <!--                        <img th:src="@{|/upload/${file.getBf_sysfilename()}|}" width="100">-->
+                            <a th:href="@{|/board/download?bf_sysfilename=${file.bf_sysfilename}&bf_orifilename=${file.bf_orifilename}|}">
+                                <i class='far fa-file' style='font-size: 20px'></i>
+                                <span th:text="${file.bf_orifilename}"></span>
+                            </a>
+                        </th:block>
+                    </th:block>
+                </div>
             </div>
-        </div>
+        </div>  <!-- content end -->
         <!-- 버튼 영역 -->
         <div class="btn-area">
             <button class="btn-write" id="upbtn"
@@ -136,6 +140,7 @@
     console.log("rList:", [[${rList}]])  //java 객체 --> json
     function upload_board(bnum) {
         console.log('update bnum:' + bnum);
+        location.href="/board/update?b_num="+bnum;
     }
 
     function delete_board(button) {

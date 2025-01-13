@@ -42,4 +42,15 @@ public interface BoardDao {
 
     @Select("SELECT bf_orifilename, bf_sysfilename FROM BOARDFILE WHERE bf_bnum=#{bNum}")
     List<BoardFile> getBfList(Integer bNum);
+
+    BoardDto getBoardDetailWithFiles(Integer bNum);
+
+    @Delete("DELETE FROM REPLY WHERE r_bnum=#{bNum}")
+    boolean deleteReply(Integer bNum);
+
+    @Select("SELECT bf_sysfilename FROM BOARDFILE WHERE bf_bnum=#{bNum}")
+    String[] getSysFileName(Integer bNum);
+
+    @Delete("DELETE FROM BOARDFILE WHERE bf_bnum=#{bNum}")
+    boolean deleteBoardFile(Integer bNum);
 }
